@@ -14,7 +14,6 @@ import numpy as np
 
 class Slam_Drive():
     def __init__(self):
-
         self.goal_pub = rospy.Publisher("/move_base/goal", Twist, queue_size=10)
         self.scan_sub = rospy.Subscriber("/scan", LaserScan, self.scan_callback)
         self.path_sub = rospy.Subscriber("_path", String , self.path_callback)
@@ -157,15 +156,14 @@ class Slam_Drive():
             drive_msg.pose.pose.position.y = goal_y[lookahead_idx - 1]
 
         self.goal_pub.publish(drive_msg)
+
+        rospy.spin()
         
 if __name__ == "__main__":
     try:
         rospy.init_node("slam_drive")
         slam_drive = Slam_Drive()
-
-        while not rospy.is_shutdown():
-            slam_drive.main()
-            rospy.Rate(60).sleep()
+        slam_drive.main()
 
     except KeyboardInterrupt:
         print("code check plz") 
